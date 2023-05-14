@@ -1,5 +1,5 @@
 
-import React from "react";
+
 import { useState } from "react";
 import styled from "styled-components";
 
@@ -28,14 +28,19 @@ function Q1() {
   */
 
 
-  const [isPlaceCheck, setIsPlaceCheck] = useState(); // 상태관리 필요한 요소들을 초기값으로 저장
+  const [text, setText] = useState(false); // 상태관리 필요한 요소들을 초기값으로 저장
+  const [btnHidden, setbtnHidden] = useState(true);
 
 
   const onChange = (e) => {
-    setIsPlaceCheck(e.target.value === placeholder)
-    console.log(isPlaceCheck)
+    const inputValue = e.target.value;
+    const inPlace = e.target.placeholder;
+
+    (inputValue === inPlace) ? setText(true) : setText(false);
+    
   }
 
+  
 
   return (
     <>
@@ -48,23 +53,34 @@ function Q1() {
           style={{ textAlign: "center" }}
           onChange={onChange}
         />
-        <S.Message> 올바르게 입력하셨습니다 </S.Message>
+        <S.Message props={text}> { text === true ? `올바르게 입력하셨습니다.` : `올바르게 입력해주세요` } </S.Message>
+        {/* { text === true ? <S.Message>올바르게 입력하였습니다.</S.Message> : <S.ReMessage>올바르게 입력해주세요</S.ReMessage>} */}
       </div>
 
       <div>
         <h2>문제1-2. </h2>
-        <button>보이기</button>
-        <p> 이 문구는 보이기 상태일 때만 볼 수 있습니다 </p>
+        <button onClick={(prev) => {
+          setbtnHidden( (prev) = !prev )
+        }}>{btnHidden === true ? `보이기` : `숨기기`}</button>
+        <p>{btnHidden === true ? ` ` : `이 문구는 보이기 상태일 때만 볼 수 있습니다`}</p>
       </div>
     </>
   );
 }
 export default Q1;
 
+
 const Message = styled.p`
-  color: ${ (isPlaceCheck) => { return isPlaceCheck? "#12b886" : "#f46056"} }
+  color: ${({props}) => {return props ? "#e6e6e6" : "f3f3f3"}}
 `;
 
+// const ReMessage = styled.p`
+// color: #f46056;
+
+// `;
 const S = {
   Message,
+  //ReMessage
 };
+
+
