@@ -4,18 +4,12 @@ import Q1Form from "../atom/Form";
 import ReducerQ1List from "../atom/List";
 import reducer from "../../../../store/1_reducer";
 
-// useReducer는 디스패치, 액션,리듀서로 구성되어있다.
-// 디스패치 : 상태업데이트를 위한 요구서를 액션으로 보낸다.
-// 액션 : 요구의 내용(객체)
-// 리듀서 : 업데이트 로직 분리화, 상태를 업데이트 한다. 
-
 const ReducerQ1Page = () => {
   /* 
       문제 1)
       로직 분리하기
     
-      재료 추가 로직 분리하기 ---> 업데이트 로직을 모듈화 : reducer 
-
+      재료 추가 로직 분리하기
 
       1) 재료 추가 로직 작성하기
       2) 재료 삭제 로직 작성하기
@@ -24,6 +18,7 @@ const ReducerQ1Page = () => {
           src/store/1_reducer.js에 구현해보세요
     */
 
+// 데이터 저장소 
   const [ingredients, setIngredients] = useState([
     { id: 1, name: "피자 도우", price: 1000 },
     { id: 2, name: "토마토 소스", price: 500 },
@@ -32,29 +27,33 @@ const ReducerQ1Page = () => {
     { id: 5, name: "양파", price: 500 },
   ]);
 
-  const [state, dispatch] = useReducer(reducer, ingredients);
 
-  const [inputValue, setInputValue] = useState({
-    name: "",
-    price: "",
+// reducer에게 자본을 전달함 
+// reducer가 해야할일 상태값을 추가하고 삭제하기 
+//ingredients chrl
+const [state, dispatch] = useReducer(reducer,ingredients);
+
+
+
+//사용자의 입력 받기 
+// name, price 
+const [inputValue, setInputValue] = useState({
+	name : '',
+	price : '', 
 })
 
-// 디스패치를 통해 타이봐
+const onSubmit = () => {
+	dispatch({type:'UPDATE_INPUT' , payload: {inputValue} })
+}
 
+const onClick = () => {
+  dispatch({type: 'ADD_LIST', payload: {inputValue}})
+}
 
-  const onSubmit = (e) => {
-    dispatch({
-      type: 'ADD_MENU',
-      payload: inputValue
-    })
-  }
+const DeleteValue = (id) =>{
+	dispatch({type: 'DELETE_LIST', payload: {ingredients}})
+}
 
-  const handelDel = () => {
-    dispatch({
-      type: 'DELETE_MENU',
-      payload : inputValue
-    })
-  }
   return (
     <>
       <h2>문제 1</h2>
@@ -65,9 +64,9 @@ const ReducerQ1Page = () => {
             <th>가격</th>
           </tr>
         </thead>
-        <ReducerQ1List ingredients={ingredients} onChange={handelDel}/>
+        <ReducerQ1List ingredients={ingredients} onClick={DeleteValue} />
       </table>
-      <Q1Form onSubmit={onSubmit} onChange={inputValue} />
+      <Q1Form onSubmit={onSubmit} inputValue={inputValue} onClick={onClick}/>
       <NavigateButton isFistPage to={"/2_context/q1"} />
     </>
   );
