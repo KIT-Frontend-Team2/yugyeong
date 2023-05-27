@@ -18,7 +18,6 @@ const ReducerQ1Page = () => {
           src/store/1_reducer.js에 구현해보세요
     */
 
-// 데이터 저장소 
   const [ingredients, setIngredients] = useState([
     { id: 1, name: "피자 도우", price: 1000 },
     { id: 2, name: "토마토 소스", price: 500 },
@@ -27,33 +26,16 @@ const ReducerQ1Page = () => {
     { id: 5, name: "양파", price: 500 },
   ]);
 
+  // ingredients 초기값 
+  // reducer : 상태 업데이트 로직 
+  // dispatch : 은행원(디스패치) 리듀서에게 액션(처리요청과 정보)을 전달한다. 
+  // state : reducer를 통해 반환된 결과값 
+  // dispatch가 전달해야할 기능과 정보는 어디에 ? : 추가, 삭제,input 
 
-// reducer에게 자본을 전달함 
-// reducer가 해야할일 상태값을 추가하고 삭제하기 
-//ingredients chrl
-const [state, dispatch] = useReducer(reducer,ingredients);
 
+  const [state, dispatch] = useReducer(reducer, ingredients)
 
-
-//사용자의 입력 받기 
-// name, price 
-const [inputValue, setInputValue] = useState({
-	name : '',
-	price : '', 
-})
-
-const onSubmit = () => {
-	dispatch({type:'UPDATE_INPUT' , payload: {inputValue} })
-}
-
-const onClick = () => {
-  dispatch({type: 'ADD_LIST', payload: {inputValue}})
-}
-
-const DeleteValue = (id) =>{
-	dispatch({type: 'DELETE_LIST', payload: {ingredients}})
-}
-
+  console.log(state);
   return (
     <>
       <h2>문제 1</h2>
@@ -64,9 +46,9 @@ const DeleteValue = (id) =>{
             <th>가격</th>
           </tr>
         </thead>
-        <ReducerQ1List ingredients={ingredients} onClick={DeleteValue} />
+        <ReducerQ1List ingredients={ingredients} state={state} dispatch={dispatch}/>
       </table>
-      <Q1Form onSubmit={onSubmit} inputValue={inputValue} onClick={onClick}/>
+      <Q1Form onSubmit={"onSubmit"}  dispatch={dispatch} />
       <NavigateButton isFistPage to={"/2_context/q1"} />
     </>
   );
