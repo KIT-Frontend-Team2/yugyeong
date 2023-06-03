@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 import Comment from "../../components/2.state/comment";
 
@@ -11,10 +11,32 @@ function State2() {
         Components는 src/components/state/comment.js를 활용하세요
         
     Q2. 댓글 작성 수정 삭제 기능을 구현해보세요 :)
-            1. 댓글 작성 기능
+            1. 댓글 작성 기능--> 
             2. 댓글 수정 기능
             3. 댓글 삭제 기능 ( 본인이 작성한 댓글만 삭제할 수 있습니다, myComment 활용 )
     */
+
+  // 
+
+  // 기능 구현 
+  // 사용자가 이름과 댓글을 작성 후 등록하면 카운트가 증가하며 화면에 렌더링된다. 
+  // 동작 순서 
+  // 1. 사용자의 입력값을 받는다. 
+  // 2. 배열에 담는다. 
+  // 3. 추가버튼을 누르면 렌더링이 발생한다. 
+  
+  // 필요기능 
+  // 0. 조회 : 화면에 목록 뿌려주기 
+  // 1. 추가 : 사용자가 입력한 값 + id 값을 생성하여 기존 배열에 추가한다. 
+  // 2. 수정 : 수정하고자 하는 id를 찾고 일치한다면 해당 객체 내부의 컨텐츠를 새로 입력 한 컨텐츠로 교체 
+  // -->  데이터 배열을 업데이트 하는 함수를 자식 컴폰넌트에게 배열의 값과 함꼐 전달 
+  // 3. 삭제 : id 값을 찾고 일치한다면 해당 객체조건과 일치하는 새로운 배열 생성 
+
+
+  // 사용자 데이터 받아오기 :  ref --> 정상참조하기 위해서 핸들러 내부에서 값을 받아야한다. 
+
+  
+
 
   const [post, setPost] = useState({
     title: "안녕하세요 여러분 김성용 강사입니다 :)",
@@ -63,6 +85,73 @@ function State2() {
     ],
   });
 
+// 사용자 값을 입력 받기 
+  const userName = useRef('');
+  const userContext = useRef(''); 
+
+  // // // 사용자 구별하기 
+  // const [isMyComment, setIsMyComment] = useState(post.Comments.myComment)
+
+
+  // 외부에서 참조하면 오류가 발생한다. 그 이유: ref는 렌더링과 상관없이 값을 참조하는데 핸들러 외부에서 사용하게되면 undefined 값에 접근하게되서 typeerror가 나타난다. 
+
+  
+  // const userName2 = userName.current.value
+  // const userContext2 = userContext.current.value
+  // console.log(userName2)
+  // console.log(userContext2)
+
+
+  const handleAdd = () => {
+    const userName2 = userName.current.value
+    const userContext2 = userContext.current.value
+    console.log(userName2)
+    console.log(userContext2)
+    const newUserInfo = {
+      User: {
+        nickname: userName2,
+      },
+      content: userContext2,
+      myComment: false,
+    } // comment 내부의 형태를 작성해주고 
+    setPost({
+      ...post,
+      Comments: [...post.Comments, newUserInfo]
+    })
+    // 보낼떄는 post전체를 복사후에  Comments: [...post.Comments, newUserInfo] 동일한 형태로 복사 
+    // 그대로 복사해주는게 중요 왜냐
+    // 위에 객체 형태랑 똑같이 치는게 정답???? 
+  }
+
+  // 수정하는 로직 
+  // 
+  const handleContent = (upcontent, name) => {
+    const _post = [...post.Comments]
+    const newPost = _post.find((post) => post.User.nickname === name )
+    newPost.content = upcontent
+    setPost({...post, _post})
+  } 
+
+
+    // 삭제 버튼을 누른다. 그럼 true로 mycomment가 변경되고 ture가 되었을때 삭제가된다. // 중
+    // truen가 되기 위한 방법은 post.Comments.user.nickname == name 같다면 treu가 되어야한다. 
+  const handleDelete =(name) => {
+    // const newDelte2 = post.Comments.find((delte) => delte.User.nickname === name )
+
+
+    // if(newDelte2){
+    //   if(post.Comments.User.nickname === name){
+    //     newDelte2.myComment = true;
+    //     const newDelte = post.Comments.filter((commit) => commit.myComment !== newDelte2 )
+    //     setPost(newDelte)
+    //   }
+    // }else{
+    //   alert("사용자가 다릅니다.")
+    // }
+  }
+
+
+  //
   return (
     <S.Wrapper>
       <h1>문제2</h1>
@@ -85,14 +174,14 @@ function State2() {
         <p>
           댓글 수: <span>{post.Comments.length}</span>
         </p>
-        <input placeholder="작성자" />
-        <input placeholder="댓글 내용" />
-        <button>댓글 작성</button>
+        <input placeholder="작성자" name="name"  ref={userName}/>
+        <input placeholder="댓글 내용"  name="content" ref={userContext}/>
+        <button onClick={handleAdd}>댓글 작성</button>
       </div>
       <S.CommentList>
         {/* list */}
         {/* 예시 데이터 */}
-        <Comment />
+        {post.Comments.map((items, index) => <Comment key={index} name={items.User.nickname} content={items.content} onChangeContent ={handleContent} handleDelete={handleDelete}/> )} 
       </S.CommentList>
     </S.Wrapper>
   );
