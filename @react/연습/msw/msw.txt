@@ -1,0 +1,66 @@
+
+-- 다음과 같은 백엔드와 통신을 하는 이유 
+-- url에 필요한 데이터를 받아서 ui에 업데이트 하기 위함
+
+-- msw란?
+-- 프론트엔드 요청을 통해 서버로부터 사용자 목록, 뉴스 피드, 제품 정보 등의 데이터를 응답받는데 
+-- 백앤드 API인 척하면서 프런트앤드의 요청에 가짜 데이터를 응답한다. 
+
+동작원리 
+-- 서비스 워커가 요청을 가로채 복제후 msw에 전달
+-- msw는 핸들러에 등록된요청이라면 가짜 응답을 브라우저에게 전달한다. 
+** key 포인트 : API 등록 —→ MSW 생성 —> MSW 동작 
+
+[환경설정]
+
+1. 설치하기 
+공식 문서 :  npm install msw --save-dev  또는  npm i -D msw 
+
+2. 초기 환경설정 
+npx msw init public/ --save
+
+3. 목데이터 파일 생성 
+-- 1. 가짜 api 폴더  :  xx.api.js ( - 이 엔드포인트에 맞는 데이터를 줄래 ?  여기 있어 )
+                     :  ui를 그려주기 위한 주소에 맞는 데이터 요청,반환 로직 
+                     --> 1. 데이터 임폴트
+                     --->2. 조회 추가, 삭제 관한 함수로직 구현하기 
+
+
+                     -상세내용
+                     -- 요청 url 엔드포인트별로 요청하는 함수로직 구현 
+                     -- 이떄 restapi 사용 
+                     -- json 객체형태로 생성 
+                     -- req : 요청객체
+                     -- res : 응답객체
+                     -- ctx : 객체 접근 핸들러 
+                     
+
+-- 2. 가짜 데이터 폴더  : xx.data.js : 가짜 데이터 zip 
+-->   도메인 외의 주소를 엔드포인트라고 하며 해당 url에 맞는 데이터를 요청하는 데  msw 권유하는 두가지 방식이 존재한다. 
+      1. restapi 
+      2. GraphQL API
+
+
+4. handler.js 등록 
+-- setupWorker()
+import { setupWorker } from "msw"
+import * as TodoApi from "./apis/todo.apis"
+-- const handler = [...Object.values(TodoApi)]
+export const worker = setupWorker(...handler)
+
+
+5. msw 실행 
+-- index.js 혹은 app,js 
+mport { worker } from "./handle";
+
+// 개발 환경에서만 msw 워커를 실행합니다.
+if (process.env.NODE_ENV === "development") {
+  worker.start();
+}
+
+
+
+--------------------------------------------------------------------
+msw 에게 사용자 값 보내고 활용하기 
+--> 보내기 
+-->  axios, fetch 
