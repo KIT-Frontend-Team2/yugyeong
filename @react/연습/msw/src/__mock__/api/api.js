@@ -9,3 +9,6 @@ import { rest } from 'msw'
 export const getList = rest.get('/api/list', async(_,res,ctx) => {
   return res(ctx.status(200), ctx.json(initialState))
 })
+console.log(getList)
+
+//
