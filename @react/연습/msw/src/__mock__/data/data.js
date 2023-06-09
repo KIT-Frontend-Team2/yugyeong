@@ -1,5 +1,5 @@
 
-
+//데이터 베이스 
 export const initialState = [
   {
     id: 1,
