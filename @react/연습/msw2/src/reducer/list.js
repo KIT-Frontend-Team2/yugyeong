@@ -72,7 +72,13 @@ export const listSlice = createSlice({
 //슬라이스 네임+생성자함수명으로 액션생성성
 // ex) todo/addTodo 
 // todo라는 이름의 슬라이스 내에  addTodo를 생성하라 
-//
+
+
+//디스패치로 createAsyncThunk로 만들어둔  getList()를 실행
+//  const res = await axios.get('/api/list')가 실행되어 
+// 서버의 get('/api/list')에서 값을 가져와 반환
+//  return res.data이 담기고 
+// 그값은 'list/getList'의 액션 페이로드로 들어가게 된다. 
 export const getList = createAsyncThunk('list/getList', async ()=>{
   // 데이터 통신 
   // 요청후 반환값을 res에 담고 res안 data에 값이 담긴다
@@ -81,5 +87,11 @@ export const getList = createAsyncThunk('list/getList', async ()=>{
   //주소가 같아도 메소드가 다르면 다른 주소로 판단한다. 
   const res = await axios.get('/api/list')
   return res.data
+})
+
+
+export const AddList = createAsyncThunk('list/postList', async () => {
+  const res = await axios.post('/api/list')
+  return res.data 
 })
 

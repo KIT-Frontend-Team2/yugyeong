@@ -13,13 +13,10 @@ function App() {
   const dispatch = useDispatch();
 
 
-  const List = () => {
-    dispatch(getList())
-  }
 
   useEffect(() => {
-    List()
-  })
+    dispatch(getList())
+  },[])
 
   console.log(listState)
   
