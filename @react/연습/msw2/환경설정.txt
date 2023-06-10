@@ -1,0 +1,3 @@
+필요한 라이브러리 설치 
+npm i react-redux @reduxjs/toolkit msw axios 
+npx msw init public/ --> msw 환경설정 

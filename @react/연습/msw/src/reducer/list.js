@@ -19,7 +19,6 @@ const initialState = {
     Success: false,
     err: null
   }
-
 }
 
 
@@ -74,8 +73,21 @@ export const counterSlice = createSlice({
   initialState,
   extraReducers: builder => {
     builder.addCase(getList.panding, (state) => {
-      console.log(state); 
-    })
+      state.addListState.loding =true;
+      state.addListState.Success =false;
+      state.addListState.err =null;
+    });
+    builder.addCase(getList.fulfilled, (state) => {
+      state.addListState.loding =false;
+      state.addListState.Success =true;
+      state.addListState.err =null;
+    });
+    builder.addCase(getList.rejected, (state) => {
+      state.addListState.loding =false;
+      state.addListState.Success =true;
+      state.addListState.err =true;
+    });
+    
   }
 })
 
@@ -86,8 +98,13 @@ export const counterSlice = createSlice({
 //통신으로 데이터 불러오기 
 
 export const getList = createAsyncThunk('/list/getlist', async() => {
-  const res = await axios.get('/api/list');
-  return res.data
+  try{
+    const res = await axios.get('/api/list');
+    return res.data;
+  }
+  catch(error){
+    throw error;
+  }
 })
 
 

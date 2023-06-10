@@ -3,16 +3,17 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { worker } from './__mock__/handler';
-import { Provider } from 'react-redux';
-import {store} from './store/store'
+import {Provider} from 'react-redux';
+import { store } from './store/store';
+import { worker } from './mock/handle';
 
 
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
 if(process.env.NODE_ENV === 'development'){
   worker.start();
 }
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
     <App />
