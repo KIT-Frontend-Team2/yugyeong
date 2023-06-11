@@ -1,10 +1,14 @@
+import { useSelector } from "react-redux"
 
-const OneUser =  (title, content) => {
+const OneUser =  ({item}) => {
+
+  const {title, content} = item
+
 
   return(
     <div>
-      {title.title}
-      {content.content}
+      {title}
+      {content}
       <button>삭제</button>
     </div>
   )

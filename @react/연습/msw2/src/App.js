@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import './App.css';
 import OneUser from './pages/onetime';
-import { getList } from './reducer/list';
+import { AddList, getList } from './reducer/list';
 import { useEffect } from 'react';
 
 function App() {
@@ -26,11 +26,12 @@ function App() {
     const content = e.target.content.value;
     console.log(title)
     console.log(content)
+    dispatch(AddList({title,content}))
   }
-
+  console.log(`추가`,listState )
   return (
   <>
-    {listState.map((item)=><OneUser key={item.id} title={item.title} content={item.content}/>)}
+    {listState.map((item)=><OneUser key={item.id} item={item}/>)}
     <form onSubmit={onSubmit}>
       <input name='user'/>
       <textarea name='content'> </textarea>

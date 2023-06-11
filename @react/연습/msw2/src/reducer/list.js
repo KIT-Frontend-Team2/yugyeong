@@ -59,6 +59,24 @@ export const listSlice = createSlice({
       state.logicState.Success = false;
       state.logicState.error = action.payload;
     })
+
+    //추가 AddList
+    builder.addCase(AddList.pending, (state) => {
+      state.logicState.loding = true;
+      state.logicState.Success = false;
+      state.logicState.error = null;
+    })
+    builder.addCase(AddList.fulfilled, (state, action) => {
+      state.list.unshift(action.payload);
+      state.logicState.loding = false;
+      state.logicState.Success = true;
+      state.logicState.error = null;
+    })
+    builder.addCase(AddList.rejected, (state,action) => {
+      state.logicState.loding = false;
+      state.logicState.Success = false;
+      state.logicState.error = action.payload;
+    })
   }
 })
 
@@ -90,8 +108,9 @@ export const getList = createAsyncThunk('list/getList', async ()=>{
 })
 
 
-export const AddList = createAsyncThunk('list/postList', async () => {
-  const res = await axios.post('/api/list')
+// !json형태로 데이터를 서버로 전달 
+export const AddList = createAsyncThunk('list/postList', async({title,content}) => {
+  const res = await axios.post('/api/list',{title,content})
   return res.data 
 })
 
