@@ -28,8 +28,6 @@ const initialState = {
 
 }
 
-
-
 //전역상태에 초기값을 입력하고 
 //액션을 정의를 한다. 
 //서버로부터 요청과 응답을 받는 생성자 함수를 사용해 
@@ -67,12 +65,33 @@ export const listSlice = createSlice({
       state.logicState.error = null;
     })
     builder.addCase(AddList.fulfilled, (state, action) => {
-      state.list.unshift(action.payload);
+      state.list.push(action.payload);
       state.logicState.loding = false;
       state.logicState.Success = true;
       state.logicState.error = null;
     })
     builder.addCase(AddList.rejected, (state,action) => {
+      state.logicState.loding = false;
+      state.logicState.Success = false;
+      state.logicState.error = action.payload;
+    })
+
+
+    //삭제 
+    builder.addCase(delteList.pending, (state) => {
+      state.logicState.loding = true;
+      state.logicState.Success = false;
+      state.logicState.error = null;
+    })
+    builder.addCase(delteList.fulfilled, (state, action) => {
+      console.log(action.payload)
+      state.list = state.list.filter((item) => item.id !== parseInt(action.payload));
+      console.log(`새배열`,state.list)
+      state.logicState.loding = false;
+      state.logicState.Success = true;
+      state.logicState.error = null;
+    })
+    builder.addCase(delteList.rejected, (state,action) => {
       state.logicState.loding = false;
       state.logicState.Success = false;
       state.logicState.error = action.payload;
@@ -108,9 +127,18 @@ export const getList = createAsyncThunk('list/getList', async ()=>{
 })
 
 
+
+//추가
 // !json형태로 데이터를 서버로 전달 
 export const AddList = createAsyncThunk('list/postList', async({title,content}) => {
   const res = await axios.post('/api/list',{title,content})
   return res.data 
 })
 
+
+
+//삭제 
+export const delteList = createAsyncThunk('list/delteList', async({id}) => {
+  const res = await axios.delete(`/api/list/${id}`)
+  return res.data.id
+})
