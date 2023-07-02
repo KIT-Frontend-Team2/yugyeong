@@ -1,0 +1,47 @@
+
+
+  const {store,setStore} = useContext(SomeContext)
+
+  깨달은 점 정리 
+
+  [헷갈렸던 개념]
+  데이터 상태를 변경할떄 
+  setStore([DelteList])으로 할경우
+  [0][
+    [0]{
+      {},
+      {},
+    }
+  ]
+  같이 배열안에 배열이 들어가게 되어서 첫번째배열을 map 돌리게 되어 리셋한듯한 효가가 나온다. 
+
+
+  2. ref로 관리해야 렌더링 방지 잊지말기 
+  3. Update할때 중요한건 키값을 변경해주는것
+  --> 자바스크립트 키값 변경 개념을 학습할것 
+  --> 객체라면 _newContent.contents = contents
+  ---> 배여링라면 _newContent[contents] = contents
+
+
+  4. 
+   <button onClick={() => changeClick(id)} >수정</button>  
+   <button  onClick={() => {handleDelte(id)}}>삭제</button>
+   --> 콜백함수에 매개변수에 id값을 넣을 경우 해당 id는 undifiend가 된다. 
+
+  
+  5. context는 별도의 파일을 만들어서 생성한다. 
+     초기값을 넣는곳은 state쪽,, 
+     --> 다음에 리듀서로 해보자 
+
+   
+   [모르는 개념]
+   5. 날짜 데이터 , 객체 키값 변경 , { children }
+
+
+
+
+
+
+// 몰라서 찾아본것 날짜 데이터 활용 
+-- data 객체 
+
